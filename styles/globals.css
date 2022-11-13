@@ -19,12 +19,12 @@ a {
 	box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: auto) {
 	html {
-		color-scheme: dark;
+		color-scheme: auto;
 	}
 	body {
 		color: white;
-		background: black;
+		background: transparent;
 	}
 }
