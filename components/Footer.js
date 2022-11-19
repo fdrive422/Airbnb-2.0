@@ -8,8 +8,8 @@ function Footer() {
 				<p>How Airbnb works</p>
 				<p>Newsroom</p>
 				<p>Investors</p>
-				<p>Airbnb Plus</p>
-				<p>Airbnb Luxe</p>
+				<p>Airbnb Plus Clone</p>
+				<p>Airbnb Clone Luxe</p>
 			</div>
 			<div className="space-y-4 text-xs text-gray-800">
 				<h5 className="font-bold">COMMUNITY</h5>
@@ -21,7 +21,7 @@ function Footer() {
 			</div>
 			<div className="space-y-4 text-xs text-gray-800">
 				<h5 className="font-bold">HOST</h5>
-				<p>Sanath Punchibandage</p>
+				<p>Francis Frago</p>
 				<p>Presents Airbnb</p>
 				<p>The Unofficial</p>
 				<p>Airbnb Clone</p>
