@@ -9,7 +9,7 @@
 	}
 }
 
-html,
+/* html,
 body {
 	padding: 0;
 	margin: 0;
@@ -28,10 +28,10 @@ a {
 
 @media (prefers-color-scheme: auto) {
 	html {
-		color-scheme: auto;
+		color-scheme: white;
 	}
 	body {
 		color: white;
 		background: transparent;
 	}
-}
+} */
