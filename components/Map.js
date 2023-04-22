@@ -26,7 +26,7 @@ function MapBox({ searchResults }) {
 			height: "100%",
 			latitude: center.latitude,
 			longitude: center.longitude,
-			zoom: 11,
+			zoom: 12,
 		});
 	}, [center.latitude, center.longitude, searchResults]);
 
