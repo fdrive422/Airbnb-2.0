@@ -1,3 +1,7 @@
+### <a href="https://airbnb-2-0-two.vercel.app/">LIVE DEMO</a>
+
+![Screen Shot 2023-01-15 at 22 52 25 PM](https://user-images.githubusercontent.com/72363705/212615799-686dfab4-e19f-467e-b0f9-6f8cf8613dd9.png)
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
