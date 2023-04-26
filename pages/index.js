@@ -8,6 +8,19 @@ import MediumCard from "../components/MediumCard";
 import LargeCard from "../components/LargeCard";
 import Footer from "../components/Footer";
 
+
+const search = () => {
+  router.push({
+    pathname: "/search",
+    query: {
+      location: location,
+      startDate: new Date().toISOString(),
+      endDate: new Date().toISOString(),
+      noOfGuests: 1,
+    },
+  });
+};
+
 export default function Home({ exploreData, cardsData }) {
   return (
     <div className="">
@@ -33,6 +46,7 @@ export default function Home({ exploreData, cardsData }) {
             ))}
           </div>
         </section>
+
         <section>
           <h2 className="text-4xl font-semibold py-8">Live Anywhere</h2>
           <div className="flex space-x-3 overflow-scroll scrollbar-hide p-3 -ml-3">
@@ -41,6 +55,7 @@ export default function Home({ exploreData, cardsData }) {
             ))}
           </div>
         </section>
+
         <LargeCard
           img="https://links.papareact.com/4cj"
           title="The Greatest Outdoors"
