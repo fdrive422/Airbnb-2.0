@@ -1,27 +1,31 @@
-const EUR_TO_USD = 1.08;
-
-// Strips any currency symbol, parses the number, converts EUR→USD, formats as $
+/**
+ * Normalises any price string to USD display.
+ * Handles: AUD/EUR/GBP/€/£ prefixes, "x 5 nights" → " 5 nights", numeric values.
+ */
 export function formatUSD(value) {
-  if (!value && value !== 0) return "";
+  if (value === null || value === undefined || value === "") return "";
 
-  // If it's already a formatted string (e.g. "€120 / night" or "€850 total")
-  if (typeof value === "string") {
-    const suffix = value.replace(/[€£$\d,.\s]/g, "").trim(); // e.g. "/ night" or "total"
-    const numeric = parseFloat(value.replace(/[^0-9.]/g, ""));
-    if (isNaN(numeric)) return value;
-    const usd = Math.round(numeric * EUR_TO_USD);
-    const formatted = new Intl.NumberFormat("en-US", {
+  // Numeric — format directly as USD
+  if (typeof value === "number") {
+    return new Intl.NumberFormat("en-US", {
       style: "currency",
       currency: "USD",
       maximumFractionDigits: 0,
-    }).format(usd);
-    return suffix ? `${formatted} ${suffix}` : formatted;
+    }).format(value);
   }
 
-  const usd = Math.round(Number(value) * EUR_TO_USD);
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    maximumFractionDigits: 0,
-  }).format(usd);
+  if (typeof value === "string") {
+    return value
+      // Replace currency codes with $
+      .replace(/\b(AUD|EUR|GBP|CAD|NZD)\s*/gi, "$")
+      // Replace unicode currency symbols
+      .replace(/[€£¥]\s*/g, "$")
+      // Replace " x " separator between numbers and text (e.g. "$150 x 5 nights")
+      .replace(/\s+x\s+/gi, " ")
+      // Collapse any double-spaces left behind
+      .replace(/\s{2,}/g, " ")
+      .trim();
+  }
+
+  return String(value);
 }
