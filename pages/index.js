@@ -7,13 +7,13 @@ import MediumCard from "../components/MediumCard";
 import LargeCard from "../components/LargeCard";
 import Footer from "../components/Footer";
 
-// Outdoor pool/terrace similar to banner aesthetic (Unsplash)
+// Sunlit forest path — classic "Greatest Outdoors" feel (Unsplash, very stable)
 const OUTDOORS_IMG =
-  "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=1200&q=80";
+  "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1400&q=80";
 
 export default function Home({ exploreData, cardsData }) {
   return (
-    <div className="">
+    <div className="bg-white dark:bg-gray-900 min-h-screen transition-colors duration-200">
       <Head>
         <title>Airbnb Clone - Unofficial Build</title>
         <link rel="icon" href="/favicon.ico" />
@@ -23,7 +23,7 @@ export default function Home({ exploreData, cardsData }) {
 
       <main className="max-w-7xl mx-auto px-8 sm:px-16">
         <section className="pt-6">
-          <h2 className="text-4xl font-semibold pb-5">Explore Nearby</h2>
+          <h2 className="text-4xl font-semibold pb-5 dark:text-white">Explore Nearby</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {exploreData?.map(({ img, distance, location }) => (
               <SmallCard
@@ -37,7 +37,7 @@ export default function Home({ exploreData, cardsData }) {
         </section>
 
         <section>
-          <h2 className="text-4xl font-semibold py-8">Live Anywhere</h2>
+          <h2 className="text-4xl font-semibold py-8 dark:text-white">Live Anywhere</h2>
           <div className="flex space-x-3 overflow-scroll scrollbar-hide p-3 -ml-3">
             {cardsData?.map(({ img, title }) => (
               <MediumCard key={title} img={img} title={title} />
@@ -101,27 +101,11 @@ const FALLBACK_EXPLORE = [
   },
 ];
 
+// Original repo images — restored as requested
 const FALLBACK_CARDS = [
-  {
-    img: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=400&q=80",
-    title: "Entire homes",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1449158743715-0a90ebb6d2d8?w=400&q=80",
-    title: "Cabins & cottages",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=400&q=80",
-    title: "Amazing pools",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1543489822-c49534f3271f?w=400&q=80",
-    title: "Unique stays",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=400&q=80",
-    title: "Luxury villas",
-  },
+  { img: "https://links.papareact.com/2io", title: "Entire homes" },
+  { img: "https://links.papareact.com/Xp9", title: "Cabins & cottages" },
+  { img: "https://links.papareact.com/7eh", title: "Unique stays" },
 ];
 
 async function safeFetch(url, fallback, pickImg) {
@@ -129,11 +113,8 @@ async function safeFetch(url, fallback, pickImg) {
     const res = await fetch(url, { signal: AbortSignal.timeout(5000) });
     if (!res.ok) return fallback;
     const data = await res.json();
-    // Always replace images — muscache CDN URLs are unreliable
-    return data.map((item) => ({
-      ...item,
-      img: pickImg(item),
-    }));
+    if (!pickImg) return data; // pass-through — use images as returned by API
+    return data.map((item) => ({ ...item, img: pickImg(item) }));
   } catch {
     return fallback;
   }
@@ -141,10 +122,11 @@ async function safeFetch(url, fallback, pickImg) {
 
 export async function getServerSideProps() {
   const [exploreData, cardsData] = await Promise.all([
+    // Explore: always swap in curated city thumbnails (muscache URLs unreliable)
     safeFetch("https://www.jsonkeeper.com/b/4G1G", FALLBACK_EXPLORE,
       (item) => pickExploreImg(item.location)),
-    safeFetch("https://www.jsonkeeper.com/b/VHHT", FALLBACK_CARDS,
-      (item) => pickPropertyImg(item.title || item.img)),
+    // Live Anywhere: use original API images as-is; fall back to papareact originals
+    safeFetch("https://www.jsonkeeper.com/b/VHHT", FALLBACK_CARDS, null),
   ]);
 
   return {

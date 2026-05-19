@@ -13,6 +13,56 @@
   .button {
     @apply px-4 py-2 border rounded-full cursor-pointer
            hover:shadow-md active:scale-95 active:bg-gray-100
+           dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800 dark:active:bg-gray-700
            transition-all duration-150 ease-out text-sm font-medium;
   }
+}
+
+/* ── Dark mode overrides for react-date-range ─────────────────────── */
+.dark .rdrCalendarWrapper,
+.dark .rdrDateRangeWrapper {
+  background-color: #1f2937;
+  color: #f9fafb;
+}
+
+.dark .rdrMonth {
+  background-color: #1f2937;
+}
+
+.dark .rdrDayNumber span,
+.dark .rdrWeekDay,
+.dark .rdrMonthAndYearPickers select {
+  color: #f9fafb;
+}
+
+.dark .rdrMonthAndYearPickers select {
+  background-color: #374151;
+}
+
+.dark .rdrDayPassive .rdrDayNumber span {
+  color: #6b7280;
+}
+
+.dark .rdrDayDisabled {
+  background-color: #111827;
+}
+
+.dark .rdrDayDisabled .rdrDayNumber span {
+  color: #4b5563;
+}
+
+.dark .rdrNextPrevButton {
+  background-color: #374151;
+}
+
+.dark .rdrNextPrevButton:hover {
+  background-color: #4b5563;
+}
+
+.dark .rdrPprevButton i {
+  border-color: transparent #f9fafb transparent transparent;
+}
+
+.dark .rdrNextButton i {
+  border-color: transparent transparent transparent #f9fafb;
 }

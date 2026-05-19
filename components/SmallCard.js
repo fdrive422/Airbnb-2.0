@@ -21,7 +21,8 @@ function SmallCard({ img, location, distance }) {
     <div
       onClick={search}
       className="flex items-center m-2 mt-5 space-x-4 rounded-xl cursor-pointer
-      hover:bg-gray-100 hover:scale-105 transition-transform duration-200 ease-out"
+                 hover:bg-gray-100 dark:hover:bg-gray-800
+                 hover:scale-105 transition-all duration-200 ease-out"
     >
       <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg">
         <Image
@@ -33,8 +34,8 @@ function SmallCard({ img, location, distance }) {
         />
       </div>
       <div>
-        <h2 className="font-medium">{location}</h2>
-        <h3 className="text-gray-500 text-sm">{distance}</h3>
+        <h2 className="font-medium dark:text-white">{location}</h2>
+        <h3 className="text-gray-500 dark:text-gray-400 text-sm">{distance}</h3>
       </div>
     </div>
   );

@@ -14,21 +14,21 @@ function Search({ searchResults, searchLocation }) {
 	const range = `${formattedStartDate} - ${formattedEndDate}`;
 
 	return (
-		<div>
+		<div className="bg-white dark:bg-gray-900 min-h-screen transition-colors duration-200">
 			<Header
 				placeholder={`${location === "Unknown" ? searchLocation : location} | ${range} | ${noOfGuests} guests`}
 			/>
 			<main className="flex">
 				<section className="flex-grow pt-14 px-6">
-					<p className="text-xs text-gray-500">
+					<p className="text-xs text-gray-500 dark:text-gray-400">
 						{searchResults.length} Stays · {range} · {noOfGuests} guests
 					</p>
-					<h1 className="text-3xl font-semibold mt-2 mb-6">
+					<h1 className="text-3xl font-semibold mt-2 mb-6 dark:text-white">
 						{location === "Unknown"
 							? `Sorry, we couldn't find matches. How about ${searchLocation}?`
 							: `Stays in ${location}`}
 					</h1>
-					<div className="hidden lg:inline-flex mb-5 space-x-3 text-gray-800 whitespace-nowrap">
+					<div className="hidden lg:inline-flex mb-5 space-x-3 text-gray-800 dark:text-gray-300 whitespace-nowrap">
 						<p className="button">Cancellation Flexibility</p>
 						<p className="button">Type of Place</p>
 						<p className="button">Price</p>

@@ -13,7 +13,7 @@ function MediumCard({ img, title }) {
           sizes="320px"
         />
       </div>
-      <h3 className="text-2xl mt-3 font-semibold">{title}</h3>
+      <h3 className="text-2xl mt-3 font-semibold dark:text-white">{title}</h3>
     </div>
   );
 }
