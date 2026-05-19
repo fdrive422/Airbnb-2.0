@@ -2,9 +2,7 @@ import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 
-// Mid-century modern home with pool — matches the glass/wood/dusk aesthetic (Unsplash)
-const BANNER_IMAGE =
-  "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=1920&q=80";
+const BANNER_IMAGE = "/images/banner.jpg";
 
 const US_LOCATIONS = [
   "New York",

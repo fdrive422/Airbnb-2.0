@@ -7,9 +7,7 @@ import MediumCard from "../components/MediumCard";
 import LargeCard from "../components/LargeCard";
 import Footer from "../components/Footer";
 
-// Sunlit forest path — classic "Greatest Outdoors" feel (Unsplash, very stable)
-const OUTDOORS_IMG =
-  "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=1400&q=80";
+const OUTDOORS_IMG = "/images/outdoors.jpg";
 
 export default function Home({ exploreData, cardsData }) {
   return (
