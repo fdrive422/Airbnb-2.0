@@ -13,7 +13,7 @@ export default function Home({ exploreData, cardsData }) {
   return (
     <div className="bg-white dark:bg-gray-900 min-h-screen transition-colors duration-200">
       <Head>
-        <title>Airbnb Clone - Unofficial Build</title>
+        <title>StayFinder — Property Rental Demo</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />

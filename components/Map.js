@@ -31,7 +31,7 @@ function MapBox({ searchResults }) {
   return (
     <Map
       mapStyle="mapbox://styles/fdrive/clamnunrs002m16rw6wdkix34"
-      mapboxAccessToken={process.env.mapbox_key}
+      mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
       {...viewState}
       onMove={(evt) => setViewState(evt.viewState)}
       style={{ width: "100%", height: "100%" }}
