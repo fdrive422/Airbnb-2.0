@@ -61,19 +61,7 @@ function Search({ searchResults, searchLocation }) {
 
 export default Search;
 
-// ---------------------------------------------------------------------------
-// Reliable Unsplash property images (cycled across listings)
-// ---------------------------------------------------------------------------
-const PROPERTY_IMGS = [
-	"https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=600&q=80",
-	"https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=600&q=80",
-	"https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600&q=80",
-	"https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&q=80",
-	"https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600&q=80",
-	"https://images.unsplash.com/photo-1416331108676-a22ccb276e35?w=600&q=80",
-	"https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&q=80",
-	"https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=600&q=80",
-];
+import { pickPropertyImg } from "../utils/images";
 
 // Hardcoded fallback listings per US city (used when API is unreachable)
 const CITY_FALLBACKS = {
@@ -115,10 +103,11 @@ const CITY_FALLBACKS = {
 	],
 };
 
+// Hash the listing name → unique, stable image per property (never repeats on the same page)
 function withUnsplashImages(results) {
-	return results.map((item, i) => ({
+	return results.map((item) => ({
 		...item,
-		img: PROPERTY_IMGS[i % PROPERTY_IMGS.length],
+		img: pickPropertyImg(item.name || item.message || item.img),
 	}));
 }
 

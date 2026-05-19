@@ -1,4 +1,5 @@
 import Head from "next/head";
+import { pickExploreImg, pickPropertyImg } from "../utils/images";
 import Header from "../components/Header";
 import Banner from "../components/Banner";
 import SmallCard from "../components/SmallCard";
@@ -123,15 +124,15 @@ const FALLBACK_CARDS = [
   },
 ];
 
-async function safeFetch(url, fallback) {
+async function safeFetch(url, fallback, pickImg) {
   try {
     const res = await fetch(url, { signal: AbortSignal.timeout(5000) });
     if (!res.ok) return fallback;
     const data = await res.json();
-    // Replace any failing muscache/papareact image URLs with Unsplash equivalents
-    return data.map((item, i) => ({
+    // Always replace images — muscache CDN URLs are unreliable
+    return data.map((item) => ({
       ...item,
-      img: fallback[i % fallback.length]?.img ?? item.img,
+      img: pickImg(item),
     }));
   } catch {
     return fallback;
@@ -140,8 +141,10 @@ async function safeFetch(url, fallback) {
 
 export async function getServerSideProps() {
   const [exploreData, cardsData] = await Promise.all([
-    safeFetch("https://www.jsonkeeper.com/b/4G1G", FALLBACK_EXPLORE),
-    safeFetch("https://www.jsonkeeper.com/b/VHHT", FALLBACK_CARDS),
+    safeFetch("https://www.jsonkeeper.com/b/4G1G", FALLBACK_EXPLORE,
+      (item) => pickExploreImg(item.location)),
+    safeFetch("https://www.jsonkeeper.com/b/VHHT", FALLBACK_CARDS,
+      (item) => pickPropertyImg(item.title || item.img)),
   ]);
 
   return {

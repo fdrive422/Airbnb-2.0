@@ -1,4 +1,3 @@
-import Image from "next/image";
 import React, { useState } from "react";
 import {
   MagnifyingGlassIcon,
@@ -72,18 +71,19 @@ function Header({ placeholder }) {
 
   return (
     <header className="sticky top-0 z-50 grid grid-cols-3 bg-white shadow-md p-3 md:px-10">
-      {/* Logo */}
+      {/* Logo — inline SVG, no external dependency */}
       <div
         onClick={() => router.push("/")}
-        className="relative flex items-center h-10 cursor-pointer my-auto"
+        className="flex items-center gap-2 cursor-pointer my-auto"
       >
-        <Image
-          src="https://links.papareact.com/qd3"
-          alt="Airbnb logo"
-          fill
-          className="object-contain object-left"
-          sizes="150px"
-        />
+        {/* bélo mark */}
+        <svg viewBox="0 0 32 40" className="h-9 w-auto" fill="#FF385C" aria-hidden="true">
+          <path d="M16 1C8.3 1 2 7.3 2 15c0 4.6 2.1 8.7 5.4 11.4L16 39l8.6-12.6C27.9 23.7 30 19.6 30 15 30 7.3 23.7 1 16 1zm0 19.5c-3 0-5.5-2.5-5.5-5.5S13 9.5 16 9.5s5.5 2.5 5.5 5.5-2.5 5.5-5.5 5.5z" />
+        </svg>
+        {/* wordmark */}
+        <span className="hidden sm:block text-[#FF385C] font-extrabold text-xl tracking-tight select-none">
+          airbnb
+        </span>
       </div>
 
       {/* Search bar */}
