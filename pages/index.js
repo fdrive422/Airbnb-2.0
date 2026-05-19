@@ -1,25 +1,10 @@
 import Head from "next/head";
-import Image from "next/image";
-import styles from "../styles/Home.module.css";
 import Header from "../components/Header";
 import Banner from "../components/Banner";
 import SmallCard from "../components/SmallCard";
 import MediumCard from "../components/MediumCard";
 import LargeCard from "../components/LargeCard";
 import Footer from "../components/Footer";
-
-
-const search = () => {
-  router.push({
-    pathname: "/search",
-    query: {
-      location: location,
-      startDate: new Date().toISOString(),
-      endDate: new Date().toISOString(),
-      noOfGuests: 1,
-    },
-  });
-};
 
 export default function Home({ exploreData, cardsData }) {
   return (
@@ -34,7 +19,6 @@ export default function Home({ exploreData, cardsData }) {
       <main className="max-w-7xl mx-auto px-8 sm:px-16">
         <section className="pt-6">
           <h2 className="text-4xl font-semibold pb-5">Explore Nearby</h2>
-          {/* Pull some data from a server using API endpoints */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {exploreData?.map(({ img, distance, location }) => (
               <SmallCard
@@ -68,19 +52,36 @@ export default function Home({ exploreData, cardsData }) {
   );
 }
 
-export async function getStaticProps() {
-  const exploreData = await fetch("https://www.jsonkeeper.com/b/4G1G").then(
-    (res) => res.json()
-  );
+const FALLBACK_EXPLORE = [
+  { img: "https://links.papareact.com/ygk", location: "New York", distance: "45-minute drive" },
+  { img: "https://links.papareact.com/e0p", location: "Miami", distance: "4-hour flight" },
+  { img: "https://links.papareact.com/43p", location: "Los Angeles", distance: "5-hour flight" },
+  { img: "https://links.papareact.com/s1o", location: "Chicago", distance: "2-hour flight" },
+];
 
-  const cardsData = await fetch("https://www.jsonkeeper.com/b/VHHT").then(
-    (res) => res.json()
-  );
+const FALLBACK_CARDS = [
+  { img: "https://links.papareact.com/2io", title: "Entire homes" },
+  { img: "https://links.papareact.com/Xp9", title: "Cabins &amp; cottages" },
+  { img: "https://links.papareact.com/7eh", title: "Unique stays" },
+];
+
+async function safeFetch(url, fallback) {
+  try {
+    const res = await fetch(url, { signal: AbortSignal.timeout(5000) });
+    if (!res.ok) return fallback;
+    return res.json();
+  } catch {
+    return fallback;
+  }
+}
+
+export async function getServerSideProps() {
+  const [exploreData, cardsData] = await Promise.all([
+    safeFetch("https://www.jsonkeeper.com/b/4G1G", FALLBACK_EXPLORE),
+    safeFetch("https://www.jsonkeeper.com/b/VHHT", FALLBACK_CARDS),
+  ]);
 
   return {
-    props: {
-      exploreData,
-      cardsData,
-    },
+    props: { exploreData, cardsData },
   };
 }

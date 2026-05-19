@@ -1,42 +1,48 @@
 import React from "react";
 
+const FOOTER_LINKS = [
+  {
+    heading: "SUPPORT",
+    links: ["Help Center", "AirCover", "Safety information", "Accessibility", "Contact Us"],
+  },
+  {
+    heading: "COMMUNITY",
+    links: ["Airbnb.org: disaster relief", "Support Afghan refugees", "Anti-discrimination", "Guest referrals"],
+  },
+  {
+    heading: "HOSTING",
+    links: ["Airbnb your home", "AirCover for Hosts", "Hosting resources", "Community forum", "Hosting responsibly"],
+  },
+  {
+    heading: "AIRBNB",
+    links: ["Newsroom", "New features", "Careers", "Investors", "Gift cards"],
+  },
+];
+
 function Footer() {
-	return (
-		<div className="grid grid-cols-1 md:grid-cols-4 gap-10 px-16 md:px-32 py-14 bg-gray-100 text-gray-600">
-			<div className="space-y-4 text-xs text-gray-800">
-				<h5 className="font-bold">ABOUT</h5>
-				<p>How Airbnb works</p>
-				<p>Newsroom</p>
-				<p>Investors</p>
-				<p>Airbnb Plus Clone</p>
-				<p>Airbnb Clone Luxe</p>
-			</div>
-			<div className="space-y-4 text-xs text-gray-800">
-				<h5 className="font-bold">COMMUNITY</h5>
-				<p>Accessibility</p>
-				<p>This is not a real site</p>
-				<p>Its a pretty awesome clone</p>
-				<p>Built using Next JS</p>
-				<p>And Tailwind CSS</p>
-			</div>
-			<div className="space-y-4 text-xs text-gray-800">
-				<h5 className="font-bold">HOST</h5>
-				<p>Francis Frago</p>
-				<p>Presents Airbnb</p>
-				<p>The Unofficial</p>
-				<p>Airbnb Clone</p>
-				<p>Enjoy!</p>
-			</div>
-			<div className="space-y-4 text-xs text-gray-800">
-				<h5 className="font-bold">SUPPORT</h5>
-				<p>Help Center</p>
-				<p>Trust & Safety</p>
-				<p>Contact Us</p>
-				<p>FAQs</p>
-				<p>Privacy Policy</p>
-			</div>
-		</div>
-	);
+  return (
+    <footer className="bg-gray-50 border-t border-gray-200">
+      <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 px-8 md:px-16 py-12 text-gray-600">
+        {FOOTER_LINKS.map(({ heading, links }) => (
+          <div key={heading} className="space-y-3">
+            <h5 className="text-xs font-bold text-gray-800 tracking-wider">{heading}</h5>
+            {links.map((link) => (
+              <p
+                key={link}
+                className="text-xs cursor-pointer hover:text-rose-400 transition-colors"
+              >
+                {link}
+              </p>
+            ))}
+          </div>
+        ))}
+      </div>
+      <div className="border-t border-gray-200 px-8 md:px-16 py-4 flex flex-col sm:flex-row justify-between items-center text-xs text-gray-500">
+        <p>© 2024 Airbnb Clone (Unofficial) · Privacy · Terms · Sitemap</p>
+        <p className="mt-2 sm:mt-0">USD · English (US)</p>
+      </div>
+    </footer>
+  );
 }
 
 export default Footer;
