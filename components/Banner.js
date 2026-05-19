@@ -52,6 +52,9 @@ function Banner() {
         <p className="text-white text-base sm:text-xl font-medium drop-shadow-lg mb-3">
           Find your perfect getaway — anywhere in the US
         </p>
+        <p className="text-white/60 text-xs mb-3">
+          StayFinder · Demo project · Not affiliated with Airbnb, Inc.
+        </p>
         <button
           onClick={search}
           className="bg-white text-rose-500 font-bold px-10 py-4 rounded-full shadow-xl

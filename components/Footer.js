@@ -3,19 +3,19 @@ import React from "react";
 const FOOTER_LINKS = [
   {
     heading: "SUPPORT",
-    links: ["Help Center", "AirCover", "Safety information", "Accessibility", "Contact Us"],
+    links: ["Help Center", "Safety information", "Accessibility", "Contact Us", "FAQs"],
   },
   {
     heading: "COMMUNITY",
-    links: ["Airbnb.org: disaster relief", "Support Afghan refugees", "Anti-discrimination", "Guest referrals"],
+    links: ["Disaster relief", "Anti-discrimination", "Guest referrals", "Forum"],
   },
   {
     heading: "HOSTING",
-    links: ["Airbnb your home", "AirCover for Hosts", "Hosting resources", "Community forum", "Hosting responsibly"],
+    links: ["List your home", "Host resources", "Community forum", "Responsible hosting"],
   },
   {
-    heading: "AIRBNB",
-    links: ["Newsroom", "New features", "Careers", "Investors", "Gift cards"],
+    heading: "STAYFINDER",
+    links: ["About", "Newsroom", "New features", "Careers", "Gift cards"],
   },
 ];
 
@@ -39,9 +39,12 @@ function Footer() {
           </div>
         ))}
       </div>
-      <div className="border-t border-gray-200 dark:border-gray-800 px-8 md:px-16 py-4 flex flex-col sm:flex-row justify-between items-center text-xs text-gray-500 dark:text-gray-500">
-        <p>© 2024 Airbnb Clone (Unofficial) · Privacy · Terms · Sitemap</p>
-        <p className="mt-2 sm:mt-0">USD · English (US)</p>
+      <div className="border-t border-gray-200 dark:border-gray-800 px-8 md:px-16 py-4 flex flex-col sm:flex-row justify-between items-center text-xs text-gray-500 dark:text-gray-500 gap-2">
+        <p>© 2024 StayFinder · Privacy · Terms · Sitemap</p>
+        <p className="text-amber-600 dark:text-amber-400 font-medium">
+          Demo project — not affiliated with Airbnb, Inc.
+        </p>
+        <p>USD · English (US)</p>
       </div>
     </footer>
   );

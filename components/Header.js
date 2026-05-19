@@ -68,11 +68,12 @@ function Header({ placeholder }) {
         onClick={() => router.push("/")}
         className="flex items-center gap-2 cursor-pointer my-auto"
       >
-        <svg viewBox="0 0 32 40" className="h-9 w-auto" fill="#FF385C" aria-hidden="true">
-          <path d="M16 1C8.3 1 2 7.3 2 15c0 4.6 2.1 8.7 5.4 11.4L16 39l8.6-12.6C27.9 23.7 30 19.6 30 15 30 7.3 23.7 1 16 1zm0 19.5c-3 0-5.5-2.5-5.5-5.5S13 9.5 16 9.5s5.5 2.5 5.5 5.5-2.5 5.5-5.5 5.5z" />
+        {/* House icon */}
+        <svg viewBox="0 0 24 24" className="h-8 w-8 text-rose-500 dark:text-rose-400 flex-shrink-0" fill="currentColor" aria-hidden="true">
+          <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
         </svg>
-        <span className="hidden sm:block text-[#FF385C] font-extrabold text-xl tracking-tight select-none">
-          airbnb
+        <span className="hidden sm:block text-rose-500 dark:text-rose-400 font-extrabold text-xl tracking-tight select-none">
+          StayFinder
         </span>
       </div>
 

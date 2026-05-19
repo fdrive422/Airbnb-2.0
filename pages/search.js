@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import React from "react";
+import Head from "next/head";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import { format } from "date-fns";
@@ -15,6 +16,9 @@ function Search({ searchResults, searchLocation }) {
 
 	return (
 		<div className="bg-white dark:bg-gray-900 min-h-screen transition-colors duration-200">
+			<Head>
+				<title>Search Results — StayFinder Demo</title>
+			</Head>
 			<Header
 				placeholder={`${location === "Unknown" ? searchLocation : location} | ${range} | ${noOfGuests} guests`}
 			/>

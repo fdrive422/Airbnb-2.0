@@ -6,6 +6,7 @@ import "react-date-range/dist/theme/default.css";
 import ProgressBar from "@badrap/bar-of-progress";
 import Router from "next/router";
 import { ThemeProvider } from "../context/ThemeContext";
+import DisclaimerBanner from "../components/DisclaimerBanner";
 
 const progress = new ProgressBar({
   size: 4,
@@ -21,6 +22,7 @@ Router.events.on("routeChangeError", progress.finish);
 function MyApp({ Component, pageProps }) {
   return (
     <ThemeProvider>
+      <DisclaimerBanner />
       <Component {...pageProps} />
     </ThemeProvider>
   );
