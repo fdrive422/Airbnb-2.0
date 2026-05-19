@@ -29,18 +29,16 @@ dl "$CITIES/los-angeles.jpg"   "$BASE/photo-1579963333765-b4129b3250fc?auto=form
 dl "$CITIES/chicago.jpg"       "$BASE/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=300&q=75"
 dl "$CITIES/san-francisco.jpg" "$BASE/photo-1501594907352-04cda38ebc29?auto=format&fit=crop&w=300&q=75"
 dl "$CITIES/austin.jpg"        "$BASE/photo-1531218150217-54595bc2b934?auto=format&fit=crop&w=300&q=75"
-dl "$CITIES/nashville.jpg"     "$BASE/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&w=300&q=75"
+# nashville — no verified Unsplash ID found; SmallCard renders gradient fallback
 dl "$CITIES/seattle.jpg"       "$BASE/photo-1438401171849-74ac270044ee?auto=format&fit=crop&w=300&q=75"
 dl "$CITIES/london.jpg"        "$BASE/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=300&q=75"
 dl "$CITIES/paris.jpg"         "$BASE/photo-1499856871958-5b9627545d1a?auto=format&fit=crop&w=300&q=75"
 dl "$CITIES/dubai.jpg"         "$BASE/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=300&q=75"
-dl "$CITIES/manchester.jpg"    "$BASE/photo-1567696153798-9111f9cd3d0d?auto=format&fit=crop&w=300&q=75"
-dl "$CITIES/liverpool.jpg"     "$BASE/photo-1533929736458-ca588d08c8be?auto=format&fit=crop&w=300&q=75"
+# manchester / liverpool — no verified images; SmallCard renders gradient fallback
 dl "$CITIES/york.jpg"          "$BASE/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=300&q=75"
-dl "$CITIES/cardiff.jpg"       "$BASE/photo-1579541671172-43429ce17aca?auto=format&fit=crop&w=300&q=75"
-dl "$CITIES/birkenhead.jpg"    "$BASE/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=300&q=75"
+# cardiff / birkenhead — no verified images; SmallCard renders gradient fallback
 dl "$CITIES/newquay.jpg"       "$BASE/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=300&q=75"
-dl "$CITIES/hove.jpg"          "$BASE/photo-1467226632440-65f0b4957563?auto=format&fit=crop&w=300&q=75"
+# hove — no verified image; SmallCard renders gradient fallback
 
 echo "=== Property images (search results) ==="
 dl "$PROPS/p01.jpg" "$BASE/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=600&q=75"

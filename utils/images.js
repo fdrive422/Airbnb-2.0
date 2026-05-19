@@ -40,17 +40,14 @@ const CITY_THUMBS = {
   "Austin":        "/images/cities/austin.jpg",
   "Nashville":     "/images/cities/nashville.jpg",
   "Seattle":       "/images/cities/seattle.jpg",
-  // UK/legacy locations from original project
+  // UK/legacy locations from original project (verified images only)
   "London":        "/images/cities/london.jpg",
   "Paris":         "/images/cities/paris.jpg",
   "Dubai":         "/images/cities/dubai.jpg",
-  "Manchester":    "/images/cities/manchester.jpg",
-  "Liverpool":     "/images/cities/liverpool.jpg",
   "York":          "/images/cities/york.jpg",
-  "Cardiff":       "/images/cities/cardiff.jpg",
-  "Birkenhead":    "/images/cities/birkenhead.jpg",
   "Newquay":       "/images/cities/newquay.jpg",
-  "Hove":          "/images/cities/hove.jpg",
+  // Manchester, Liverpool, Cardiff, Birkenhead, Hove — no verified image.
+  // SmallCard onError renders a gradient+initial fallback for these.
 };
 
 // -------------------------------------------------------------------
