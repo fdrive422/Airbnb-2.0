@@ -4,28 +4,17 @@ import { useRouter } from "next/router";
 
 const BANNER_IMAGE = "/images/banner.jpg";
 
-const US_LOCATIONS = [
-  "New York",
-  "Los Angeles",
-  "Miami",
-  "Chicago",
-  "San Francisco",
-  "Austin",
-  "Nashville",
-  "Seattle",
-  "Denver",
-  "Boston",
-];
+// Home base is Los Angeles — "I'm flexible" searches LA by default
+const HOME_LOCATION = "Los Angeles";
 
 function Banner() {
   const router = useRouter();
-  const location = US_LOCATIONS[Math.floor(Math.random() * US_LOCATIONS.length)];
 
   const search = () => {
     router.push({
       pathname: "/search",
       query: {
-        location,
+        location: HOME_LOCATION,
         startDate: new Date().toISOString(),
         endDate: new Date().toISOString(),
         noOfGuests: 1,

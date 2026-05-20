@@ -1,5 +1,4 @@
 import Head from "next/head";
-import { pickExploreImg, pickPropertyImg } from "../utils/images";
 import Header from "../components/Header";
 import Banner from "../components/Banner";
 import SmallCard from "../components/SmallCard";
@@ -55,16 +54,17 @@ export default function Home({ exploreData, cardsData }) {
   );
 }
 
-// Static local-asset thumbnails — no external dependency, correct order per requirements
-const FALLBACK_EXPLORE = [
-  { img: "/images/cities/san-francisco.jpg", location: "San Francisco", distance: "6-hour flight" },
-  { img: "/images/cities/seattle.jpg",       location: "Seattle",        distance: "4-hour flight" },
-  { img: "/images/cities/los-angeles.jpg",   location: "Los Angeles",    distance: "5-hour flight" },
-  { img: "/images/cities/austin.jpg",        location: "Austin",         distance: "3-hour flight" },
-  { img: "/images/cities/chicago.jpg",       location: "Chicago",        distance: "2-hour flight" },
-  { img: "/images/cities/new-york.jpg",      location: "New York",       distance: "45-min drive"  },
-  { img: "/images/cities/miami.jpg",         location: "Miami",          distance: "4-hour flight" },
-  { img: "/images/cities/london.jpg",        location: "London",         distance: "8-hour flight" },
+// Hardcoded explore destinations — distances from Los Angeles (home base).
+// Never fetched from an external API; guarantees correct cities, images, and labels.
+const EXPLORE_DESTINATIONS = [
+  { img: "/images/cities/san-francisco.jpg", location: "San Francisco", distance: "1.5-hour flight" },
+  { img: "/images/cities/seattle.jpg",       location: "Seattle",       distance: "2.5-hour flight" },
+  { img: "/images/cities/los-angeles.jpg",   location: "Los Angeles",   distance: "Local"           },
+  { img: "/images/cities/austin.jpg",        location: "Austin",        distance: "2.5-hour flight" },
+  { img: "/images/cities/chicago.jpg",       location: "Chicago",       distance: "4-hour flight"   },
+  { img: "/images/cities/new-york.jpg",      location: "New York",      distance: "5.5-hour flight" },
+  { img: "/images/cities/miami.jpg",         location: "Miami",         distance: "5-hour flight"   },
+  { img: "/images/cities/london.jpg",        location: "London",        distance: "11-hour flight"  },
 ];
 
 // Original repo images — restored as requested
@@ -87,13 +87,16 @@ async function safeFetch(url, fallback, pickImg) {
 }
 
 export async function getServerSideProps() {
-  const [exploreData, cardsData] = await Promise.all([
-    // Explore: always swap in curated city thumbnails (muscache URLs unreliable)
-    safeFetch("https://www.jsonkeeper.com/b/4G1G", FALLBACK_EXPLORE,
-      (item) => pickExploreImg(item.location)),
-    // Live Anywhere: use original API images as-is; fall back to papareact originals
-    safeFetch("https://www.jsonkeeper.com/b/VHHT", FALLBACK_CARDS, null),
-  ]);
+  // Explore destinations: always use the hardcoded list — never call external API.
+  // The jsonkeeper 4G1G endpoint returns UK cities which would override our 8 cities.
+  const exploreData = EXPLORE_DESTINATIONS;
+
+  // Live Anywhere cards: try API, fall back to papareact originals
+  const cardsData = await safeFetch(
+    "https://www.jsonkeeper.com/b/VHHT",
+    FALLBACK_CARDS,
+    null
+  );
 
   return {
     props: { exploreData, cardsData },

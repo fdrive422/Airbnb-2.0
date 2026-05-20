@@ -77,11 +77,11 @@ export default Search;
 export async function getServerSideProps(context) {
 	const { location } = context.query;
 
-	// Resolve city — "Unknown" picks a random supported city
-	const supported = Object.keys(CITY_DATA);
+	// Home base is Los Angeles — used when no city is specified or city is unrecognised
+	const HOME_CITY = "Los Angeles";
 	let searchLocation = location;
 	if (!location || location === "Unknown") {
-		searchLocation = supported[Math.floor(Math.random() * supported.length)];
+		searchLocation = HOME_CITY;
 	}
 
 	// If we have curated data for this city, use it directly — no API needed
@@ -114,8 +114,8 @@ export async function getServerSideProps(context) {
 
 	return {
 		props: {
-			searchResults: CITY_DATA["New York"],
-			searchLocation: "New York",
+			searchResults: CITY_DATA["Los Angeles"],
+			searchLocation: "Los Angeles",
 		},
 	};
 }

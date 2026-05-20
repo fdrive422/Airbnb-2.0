@@ -13,9 +13,10 @@ import { useRouter } from "next/router";
 import { useTheme } from "../context/ThemeContext";
 import MobileSearchDrawer from "./MobileSearchDrawer";
 
+// Matches the 8 cities in Explore Popular Destinations; LA listed first as home base
 const US_LOCATIONS = [
-  "New York", "Los Angeles", "Miami", "Chicago", "San Francisco",
-  "Austin", "Nashville", "Seattle", "Denver", "Boston",
+  "Los Angeles", "San Francisco", "Seattle", "Austin",
+  "Chicago", "New York", "Miami", "London",
 ];
 
 function Header({ placeholder }) {
