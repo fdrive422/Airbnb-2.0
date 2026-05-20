@@ -4,11 +4,26 @@ import { HeartIcon } from "@heroicons/react/24/outline";
 import { HeartIcon as HeartSolid, StarIcon } from "@heroicons/react/24/solid";
 import { formatUSD } from "../utils/currency";
 
-function InfoCard({ img, location, title, description, star, price, total }) {
+function InfoCard({
+  img, location, title, description, star, price, total,
+  isActive = false,
+  onClick,
+}) {
   const [liked, setLiked] = useState(false);
 
   return (
-    <div className="flex py-7 px-2 pr-4 border-b dark:border-gray-700 cursor-pointer hover:opacity-90 hover:shadow-lg dark:hover:shadow-gray-800 transition duration-200 ease-out first:border-t dark:first:border-gray-700 group">
+    <div
+      id={`card-${title?.replace(/\s+/g, "-")}`}
+      onClick={onClick}
+      className={`
+        flex py-7 px-2 pr-4 border-b dark:border-gray-700 cursor-pointer
+        hover:shadow-lg dark:hover:shadow-gray-800 transition-all duration-200 ease-out
+        first:border-t dark:first:border-gray-700 group
+        ${isActive
+          ? "ring-2 ring-rose-500 rounded-2xl bg-rose-50 dark:bg-rose-900/20 border-transparent"
+          : "hover:opacity-90"}
+      `}
+    >
       {/* Image */}
       <div className="relative h-24 w-40 md:h-52 md:w-80 flex-shrink-0 overflow-hidden rounded-2xl">
         <Image
@@ -26,7 +41,7 @@ function InfoCard({ img, location, title, description, star, price, total }) {
           <p className="text-sm text-gray-500 dark:text-gray-400">{location}</p>
           <button
             onClick={(e) => {
-              e.stopPropagation();
+              e.stopPropagation(); // prevent card click
               setLiked((l) => !l);
             }}
             className="focus:outline-none"
