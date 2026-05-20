@@ -1,20 +1,33 @@
-import React from "react";
+import React, { useRef } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 
 const BANNER_IMAGE = "/images/banner.jpg";
 
-// Home base is Los Angeles — "I'm flexible" searches LA by default
-const HOME_LOCATION = "Los Angeles";
+// All 8 featured destinations
+const DESTINATIONS = [
+  "Los Angeles", "San Francisco", "Seattle", "Austin",
+  "Chicago", "New York", "Miami", "London",
+];
+
+// Pick a random city, never the same one twice in a row
+function pickRandom(exclude) {
+  const pool = DESTINATIONS.filter((c) => c !== exclude);
+  return pool[Math.floor(Math.random() * pool.length)];
+}
 
 function Banner() {
   const router = useRouter();
+  const lastCity = useRef(null); // tracks previous pick; no re-render needed
 
   const search = () => {
+    const city = pickRandom(lastCity.current);
+    lastCity.current = city;
+
     router.push({
       pathname: "/search",
       query: {
-        location: HOME_LOCATION,
+        location: city,
         startDate: new Date().toISOString(),
         endDate: new Date().toISOString(),
         noOfGuests: 1,
@@ -33,7 +46,7 @@ function Banner() {
         sizes="100vw"
       />
 
-      {/* Gradient overlay for readability */}
+      {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/50" />
 
       {/* CTA */}
