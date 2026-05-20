@@ -21,7 +21,7 @@ export default function Home({ exploreData, cardsData }) {
 
       <main className="max-w-7xl mx-auto px-8 sm:px-16">
         <section className="pt-6">
-          <h2 className="text-4xl font-semibold pb-5 dark:text-white">Explore Nearby</h2>
+          <h2 className="text-4xl font-semibold pb-5 dark:text-white">Explore Popular Destinations</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {exploreData?.map(({ img, distance, location }) => (
               <SmallCard
@@ -55,48 +55,16 @@ export default function Home({ exploreData, cardsData }) {
   );
 }
 
-// Reliable Unsplash fallbacks — used when the external API is unreachable
+// Static local-asset thumbnails — no external dependency, correct order per requirements
 const FALLBACK_EXPLORE = [
-  {
-    img: "https://images.unsplash.com/photo-1485871981521-5b1fd3805eee?w=400&q=80",
-    location: "New York",
-    distance: "45-minute drive",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1533106497176-45ae19e68ba2?w=400&q=80",
-    location: "Miami",
-    distance: "4-hour flight",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1580655653885-65763b2597d0?w=400&q=80",
-    location: "Los Angeles",
-    distance: "5-hour flight",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=400&q=80",
-    location: "Chicago",
-    distance: "2-hour flight",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=400&q=80",
-    location: "San Francisco",
-    distance: "6-hour flight",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1531218150217-54595bc2b934?w=400&q=80",
-    location: "Austin",
-    distance: "3-hour flight",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1545419913-775e6f6a7c01?w=400&q=80",
-    location: "Nashville",
-    distance: "2-hour flight",
-  },
-  {
-    img: "https://images.unsplash.com/photo-1438401171849-74ac270044ee?w=400&q=80",
-    location: "Seattle",
-    distance: "4-hour flight",
-  },
+  { img: "/images/cities/san-francisco.jpg", location: "San Francisco", distance: "6-hour flight" },
+  { img: "/images/cities/seattle.jpg",       location: "Seattle",        distance: "4-hour flight" },
+  { img: "/images/cities/los-angeles.jpg",   location: "Los Angeles",    distance: "5-hour flight" },
+  { img: "/images/cities/austin.jpg",        location: "Austin",         distance: "3-hour flight" },
+  { img: "/images/cities/chicago.jpg",       location: "Chicago",        distance: "2-hour flight" },
+  { img: "/images/cities/new-york.jpg",      location: "New York",       distance: "45-min drive"  },
+  { img: "/images/cities/miami.jpg",         location: "Miami",          distance: "4-hour flight" },
+  { img: "/images/cities/london.jpg",        location: "London",         distance: "8-hour flight" },
 ];
 
 // Original repo images — restored as requested

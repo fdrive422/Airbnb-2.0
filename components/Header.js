@@ -11,6 +11,7 @@ import {
 import { DateRangePicker } from "react-date-range";
 import { useRouter } from "next/router";
 import { useTheme } from "../context/ThemeContext";
+import MobileSearchDrawer from "./MobileSearchDrawer";
 
 const US_LOCATIONS = [
   "New York", "Los Angeles", "Miami", "Chicago", "San Francisco",
@@ -23,6 +24,7 @@ function Header({ placeholder }) {
   const [endDate, setEndDate] = useState(new Date());
   const [noOfGuests, setNoOfGuests] = useState(1);
   const [location, setLocation] = useState("");
+  const [mobileOpen, setMobileOpen] = useState(false);
   const router = useRouter();
   const { dark, toggle } = useTheme();
 
@@ -62,7 +64,7 @@ function Header({ placeholder }) {
   const selectionRange = { startDate, endDate, key: "selection" };
 
   return (
-    <header className="sticky top-0 z-50 grid grid-cols-3 bg-white dark:bg-gray-900 shadow-md dark:shadow-gray-800 p-3 md:px-10 transition-colors duration-200">
+    <header className="sticky top-0 z-50 grid grid-cols-3 bg-white dark:bg-gray-900 shadow-md dark:shadow-gray-800 p-3 md:px-10 transition-colors duration-200 md:grid-rows-1">
       {/* Logo */}
       <div
         onClick={() => router.push("/")}
@@ -155,6 +157,25 @@ function Header({ placeholder }) {
           </div>
         </div>
       )}
+
+      {/* Mobile search pill — visible only below md breakpoint */}
+      <div className="md:hidden col-span-3 px-3 pb-3">
+        <button
+          onClick={() => setMobileOpen(true)}
+          className="w-full flex items-center gap-3 border dark:border-gray-600 rounded-full
+                     py-3 px-5 shadow-sm bg-white dark:bg-gray-800 hover:shadow-md transition-shadow"
+        >
+          <MagnifyingGlassIcon className="h-5 w-5 text-rose-400 flex-shrink-0" />
+          <span className="text-sm text-gray-400 dark:text-gray-400 truncate">
+            {placeholder || "Where to? · Dates · Guests"}
+          </span>
+        </button>
+      </div>
+
+      <MobileSearchDrawer
+        isOpen={mobileOpen}
+        onClose={() => setMobileOpen(false)}
+      />
     </header>
   );
 }
