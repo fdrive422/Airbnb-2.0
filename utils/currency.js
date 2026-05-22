@@ -9,6 +9,18 @@
  *   "€85 x 3 nights"      → "$85 3 nights"
  *   196.97  (number)       → "$197"
  */
+/**
+ * Extracts the numeric value from a price string.
+ * "$450" → 450, "$1,250" → 1250, "$1,625 5 nights" → 1625
+ */
+export function parsePrice(value) {
+  if (typeof value === "number") return value;
+  if (!value) return 0;
+  const match = String(value).match(/[\d,]+\.?\d*/);
+  if (!match) return 0;
+  return parseFloat(match[0].replace(/,/g, ""));
+}
+
 export function formatUSD(value) {
   if (value === null || value === undefined || value === "") return "";
 

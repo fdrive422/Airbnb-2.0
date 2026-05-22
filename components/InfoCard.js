@@ -8,6 +8,9 @@ function InfoCard({
   img, location, title, description, star, price, total,
   isActive = false,
   onClick,
+  onModify,
+  overrideNights,
+  overrideTotal,
 }) {
   const [liked, setLiked] = useState(false);
 
@@ -41,7 +44,7 @@ function InfoCard({
           <p className="text-sm text-gray-500 dark:text-gray-400">{location}</p>
           <button
             onClick={(e) => {
-              e.stopPropagation(); // prevent card click
+              e.stopPropagation();
               setLiked((l) => !l);
             }}
             className="focus:outline-none"
@@ -67,10 +70,25 @@ function InfoCard({
           <div className="text-right">
             <p className="text-lg font-semibold lg:text-2xl dark:text-white">
               {formatUSD(price)}
+              <span className="text-sm font-normal text-gray-400 dark:text-gray-500"> / night</span>
             </p>
-            <p className="text-xs font-light text-gray-500 dark:text-gray-400">
-              {formatUSD(total)} total (incl. taxes &amp; fees)
-            </p>
+            {overrideTotal != null ? (
+              <p className="text-xs font-medium text-rose-500 dark:text-rose-400">
+                {formatUSD(overrideTotal)} &middot; {overrideNights} night{overrideNights !== 1 ? "s" : ""} (custom)
+              </p>
+            ) : (
+              <p className="text-xs font-light text-gray-500 dark:text-gray-400">
+                {formatUSD(total)} total (incl. taxes &amp; fees)
+              </p>
+            )}
+            {onModify && (
+              <button
+                onClick={(e) => { e.stopPropagation(); onModify(); }}
+                className="mt-1 text-xs text-rose-500 hover:text-rose-600 font-medium underline underline-offset-2 transition-colors"
+              >
+                {overrideTotal != null ? "Edit stay" : "Modify stay"}
+              </button>
+            )}
           </div>
         </div>
       </div>

@@ -67,11 +67,11 @@ const EXPLORE_DESTINATIONS = [
   { img: "/images/cities/london.jpg",        location: "London",        distance: "11-hour flight"  },
 ];
 
-// Original repo images — restored as requested
 const FALLBACK_CARDS = [
-  { img: "https://links.papareact.com/2io", title: "Entire homes" },
-  { img: "https://links.papareact.com/Xp9", title: "Cabins & cottages" },
-  { img: "https://links.papareact.com/7eh", title: "Unique stays" },
+  { img: "/images/cards/entire-home.webp",    title: "Entire homes" },
+  { img: "/images/cards/outdoor-getaway.jpg", title: "Outdoor getaway" },
+  { img: "/images/cards/unique-stay.webp",    title: "Unique stays" },
+  { img: "/images/cards/pet-allowed.webp",    title: "Pet friendly" },
 ];
 
 async function safeFetch(url, fallback, pickImg) {

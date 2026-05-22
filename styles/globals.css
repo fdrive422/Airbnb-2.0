@@ -16,6 +16,11 @@
            dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-800 dark:active:bg-gray-700
            transition-all duration-150 ease-out text-sm font-medium;
   }
+
+  .button-active {
+    @apply bg-gray-900 text-white border-gray-900 hover:bg-gray-700 hover:shadow-md
+           dark:bg-white dark:text-gray-900 dark:border-white dark:hover:bg-gray-100;
+  }
 }
 
 /* ── Dark mode overrides for react-date-range ─────────────────────── */

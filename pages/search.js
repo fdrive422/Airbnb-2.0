@@ -1,12 +1,15 @@
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import Head from "next/head";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import { format } from "date-fns";
 import InfoCard from "../components/InfoCard";
 import Map from "../components/Map";
+import BookingModal from "../components/BookingModal";
+import FilterDropdown from "../components/FilterDropdown";
 import { CITY_DATA } from "../data/citySearchData";
+import { parsePrice } from "../utils/currency";
 import { MapIcon, ListBulletIcon, XMarkIcon } from "@heroicons/react/24/solid";
 
 function Search({ searchResults, searchLocation }) {
@@ -22,38 +25,86 @@ function Search({ searchResults, searchLocation }) {
 	// ── Mobile map toggle ─────────────────────────────────────────────────────
 	const [showMobileMap, setShowMobileMap] = useState(false);
 
-	// List card clicked → map will flyTo via Map.js useEffect
-	const handleListingClick = (listing) => {
-		setActiveLocation((prev) =>
-			prev?.name === listing.name ? null : listing
-		);
+	// ── Feature 1: booking modifier modal ────────────────────────────────────
+	const [selectedListing, setSelectedListing] = useState(null);
+	const [bookingOverrides, setBookingOverrides] = useState({});
+
+	// ── Feature 2: filter pills ───────────────────────────────────────────────
+	const [filters, setFilters] = useState({
+		minPrice: "",
+		maxPrice: "",
+		minBeds: 0,
+		minRating: 0,
+		sortBy: null, // 'price_asc' | 'rating_desc'
+	});
+	const [activeFilter, setActiveFilter] = useState(null); // 'price' | 'beds' | 'rating'
+
+	const hasActiveFilters =
+		filters.minPrice !== "" ||
+		filters.maxPrice !== "" ||
+		filters.minBeds > 0 ||
+		filters.minRating > 0 ||
+		filters.sortBy !== null;
+
+	const clearAllFilters = () => {
+		setFilters({ minPrice: "", maxPrice: "", minBeds: 0, minRating: 0, sortBy: null });
+		setActiveFilter(null);
 	};
 
-	// Map pin clicked → highlight card + scroll it into view on desktop
+	const toggleSort = (sortValue) => {
+		setFilters((f) => ({ ...f, sortBy: f.sortBy === sortValue ? null : sortValue }));
+	};
+
+	// ── Derived filtered + sorted results ────────────────────────────────────
+	const filteredResults = useMemo(() => {
+		let results = [...searchResults];
+
+		const minP = filters.minPrice !== "" ? Number(filters.minPrice) : 0;
+		const maxP = filters.maxPrice !== "" ? Number(filters.maxPrice) : Infinity;
+
+		if (minP > 0) results = results.filter((r) => parsePrice(r.per_night) >= minP);
+		if (maxP < Infinity) results = results.filter((r) => parsePrice(r.per_night) <= maxP);
+		if (filters.minBeds > 0) results = results.filter((r) => parseInt(r.beds) >= filters.minBeds);
+		if (filters.minRating > 0) results = results.filter((r) => r.rating >= filters.minRating);
+
+		if (filters.sortBy === "price_asc") {
+			results = [...results].sort((a, b) => parsePrice(a.per_night) - parsePrice(b.per_night));
+		} else if (filters.sortBy === "rating_desc") {
+			results = [...results].sort((a, b) => b.rating - a.rating);
+		}
+
+		return results;
+	}, [searchResults, filters]);
+
+	// ── Interaction handlers ──────────────────────────────────────────────────
+	const handleListingClick = (listing) => {
+		setActiveLocation((prev) => (prev?.name === listing.name ? null : listing));
+	};
+
 	const handlePinSelect = (listing) => {
 		setActiveLocation(listing);
 		if (!listing) return;
-		// Small delay so the ring renders before scrollIntoView
 		setTimeout(() => {
 			const id = `card-${listing.name.replace(/\s+/g, "-")}`;
-			document.getElementById(id)?.scrollIntoView({
-				behavior: "smooth",
-				block: "center",
-			});
+			document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "center" });
 		}, 50);
 	};
 
-	// From mobile bottom-sheet "View in list →"
 	const handleViewInList = () => {
 		setShowMobileMap(false);
 		setTimeout(() => {
 			if (!activeLocation) return;
 			const id = `card-${activeLocation.name.replace(/\s+/g, "-")}`;
-			document.getElementById(id)?.scrollIntoView({
-				behavior: "smooth",
-				block: "center",
-			});
+			document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "center" });
 		}, 120);
+	};
+
+	const handleBookingConfirm = ({ nights, total }) => {
+		setBookingOverrides((prev) => ({
+			...prev,
+			[selectedListing.name]: { nights, total },
+		}));
+		setSelectedListing(null);
 	};
 
 	return (
@@ -72,7 +123,7 @@ function Search({ searchResults, searchLocation }) {
 					`}
 				>
 					<p className="text-xs text-gray-500 dark:text-gray-400">
-						{searchResults.length} Stays · {range} · {noOfGuests} guest{noOfGuests > 1 ? "s" : ""}
+						{filteredResults.length} Stays{hasActiveFilters ? ` (filtered from ${searchResults.length})` : ""} &middot; {range} &middot; {noOfGuests} guest{noOfGuests > 1 ? "s" : ""}
 					</p>
 					<h1 className="text-3xl font-semibold mt-2 mb-6 dark:text-white">
 						{location === "Unknown"
@@ -80,33 +131,171 @@ function Search({ searchResults, searchLocation }) {
 							: `Stays in ${location}`}
 					</h1>
 
-					{/* Filter pills */}
-					<div className="hidden lg:inline-flex mb-5 space-x-3 text-gray-800 dark:text-gray-300 whitespace-nowrap">
-						<p className="button">Cancellation Flexibility</p>
-						<p className="button">Type of Place</p>
-						<p className="button">Price</p>
-						<p className="button">Rooms and Beds</p>
-						<p className="button">More filters</p>
+					{/* ── Filter pills ─────────────────────────────────────────── */}
+					<div className="hidden lg:flex mb-5 gap-3 text-gray-800 dark:text-gray-300 flex-wrap items-center">
+						{/* Cancellation Flexibility — sort by highest rated */}
+						<button
+							onClick={() => toggleSort("rating_desc")}
+							className={`button ${filters.sortBy === "rating_desc" ? "button-active" : ""}`}
+						>
+							Cancellation Flexibility
+						</button>
+
+						{/* Type of Place — sort by price low→high */}
+						<button
+							onClick={() => toggleSort("price_asc")}
+							className={`button ${filters.sortBy === "price_asc" ? "button-active" : ""}`}
+						>
+							Type of Place
+						</button>
+
+						{/* Price — range dropdown */}
+						<div className="relative">
+							<button
+								onClick={() => setActiveFilter(activeFilter === "price" ? null : "price")}
+								className={`button ${filters.minPrice !== "" || filters.maxPrice !== "" ? "button-active" : ""}`}
+							>
+								Price
+							</button>
+							{activeFilter === "price" && (
+								<FilterDropdown onClose={() => setActiveFilter(null)}>
+									<p className="text-sm font-semibold dark:text-white mb-3">Price per night</p>
+									<div className="flex gap-3">
+										<div className="flex-1">
+											<label className="text-xs text-gray-500 dark:text-gray-400">Min $</label>
+											<input
+												type="number"
+												placeholder="0"
+												value={filters.minPrice}
+												onChange={(e) => setFilters((f) => ({ ...f, minPrice: e.target.value }))}
+												className="w-full mt-1 px-3 py-2 border dark:border-gray-600 rounded-xl text-sm dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-rose-500"
+											/>
+										</div>
+										<div className="flex-1">
+											<label className="text-xs text-gray-500 dark:text-gray-400">Max $</label>
+											<input
+												type="number"
+												placeholder="Any"
+												value={filters.maxPrice}
+												onChange={(e) => setFilters((f) => ({ ...f, maxPrice: e.target.value }))}
+												className="w-full mt-1 px-3 py-2 border dark:border-gray-600 rounded-xl text-sm dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-rose-500"
+											/>
+										</div>
+									</div>
+									<button
+										onClick={() => { setFilters((f) => ({ ...f, minPrice: "", maxPrice: "" })); setActiveFilter(null); }}
+										className="mt-3 text-xs text-rose-500 hover:text-rose-600 font-medium"
+									>
+										Clear
+									</button>
+								</FilterDropdown>
+							)}
+						</div>
+
+						{/* Rooms and Beds — min beds dropdown */}
+						<div className="relative">
+							<button
+								onClick={() => setActiveFilter(activeFilter === "beds" ? null : "beds")}
+								className={`button ${filters.minBeds > 0 ? "button-active" : ""}`}
+							>
+								Rooms and Beds
+							</button>
+							{activeFilter === "beds" && (
+								<FilterDropdown onClose={() => setActiveFilter(null)}>
+									<p className="text-sm font-semibold dark:text-white mb-3">Minimum beds</p>
+									<div className="flex gap-2">
+										{[0, 1, 2, 3].map((n) => (
+											<button
+												key={n}
+												onClick={() => setFilters((f) => ({ ...f, minBeds: n }))}
+												className={`flex-1 py-2 rounded-xl border text-sm font-medium transition-colors
+													${filters.minBeds === n
+														? "bg-gray-900 text-white border-gray-900 dark:bg-white dark:text-gray-900"
+														: "border-gray-200 dark:border-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"}`}
+											>
+												{n === 0 ? "Any" : `${n}+`}
+											</button>
+										))}
+									</div>
+								</FilterDropdown>
+							)}
+						</div>
+
+						{/* More filters — minimum rating dropdown */}
+						<div className="relative">
+							<button
+								onClick={() => setActiveFilter(activeFilter === "rating" ? null : "rating")}
+								className={`button ${filters.minRating > 0 ? "button-active" : ""}`}
+							>
+								More filters
+							</button>
+							{activeFilter === "rating" && (
+								<FilterDropdown onClose={() => setActiveFilter(null)}>
+									<p className="text-sm font-semibold dark:text-white mb-3">Minimum rating</p>
+									<div className="flex gap-2">
+										{[0, 4, 4.5, 4.8].map((n) => (
+											<button
+												key={n}
+												onClick={() => setFilters((f) => ({ ...f, minRating: n }))}
+												className={`flex-1 py-2 rounded-xl border text-sm font-medium transition-colors
+													${filters.minRating === n
+														? "bg-gray-900 text-white border-gray-900 dark:bg-white dark:text-gray-900"
+														: "border-gray-200 dark:border-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"}`}
+											>
+												{n === 0 ? "Any" : `${n}+`}
+											</button>
+										))}
+									</div>
+								</FilterDropdown>
+							)}
+						</div>
+
+						{/* Clear all */}
+						{hasActiveFilters && (
+							<button
+								onClick={clearAllFilters}
+								className="text-xs text-rose-500 hover:text-rose-600 font-medium underline underline-offset-2 transition-colors"
+							>
+								Clear all
+							</button>
+						)}
 					</div>
 
+					{/* ── Listing cards ─────────────────────────────────────────── */}
 					<div className="flex flex-col">
-						{searchResults?.map((listing) => {
-							const { img, message, name, guests, beds, baths, amenities, rating, price, per_night } = listing;
-							return (
-								<InfoCard
-									key={`${name}-${per_night}`}
-									img={img}
-									location={message}
-									title={name}
-									description={`${guests} · ${beds} · ${baths} · ${amenities.join(" · ")}`}
-									star={rating}
-									price={per_night}
-									total={price}
-									isActive={activeLocation?.name === name}
-									onClick={() => handleListingClick(listing)}
-								/>
-							);
-						})}
+						{filteredResults.length === 0 ? (
+							<div className="py-16 text-center">
+								<p className="text-gray-500 dark:text-gray-400 text-lg">No stays match your filters.</p>
+								<button
+									onClick={clearAllFilters}
+									className="mt-3 text-rose-500 hover:text-rose-600 font-medium text-sm underline underline-offset-2"
+								>
+									Clear filters
+								</button>
+							</div>
+						) : (
+							filteredResults.map((listing) => {
+								const { img, message, name, guests, beds, baths, amenities, rating, price, per_night } = listing;
+								const override = bookingOverrides[name];
+								return (
+									<InfoCard
+										key={`${name}-${per_night}`}
+										img={img}
+										location={message}
+										title={name}
+										description={`${guests} · ${beds} · ${baths} · ${amenities.join(" · ")}`}
+										star={rating}
+										price={per_night}
+										total={price}
+										isActive={activeLocation?.name === name}
+										onClick={() => handleListingClick(listing)}
+										onModify={() => setSelectedListing(listing)}
+										overrideNights={override?.nights}
+										overrideTotal={override?.total}
+									/>
+								);
+							})
+						)}
 					</div>
 				</section>
 
@@ -123,7 +312,7 @@ function Search({ searchResults, searchLocation }) {
 					style={showMobileMap ? { top: "76px", height: "calc(100vh - 76px)" } : {}}
 				>
 					<Map
-						searchResults={searchResults}
+						searchResults={filteredResults}
 						activeLocation={activeLocation}
 						onSelect={handlePinSelect}
 					/>
@@ -135,7 +324,6 @@ function Search({ searchResults, searchLocation }) {
 				<button
 					onClick={() => {
 						setShowMobileMap((v) => !v);
-						// Returning to list — clear pin so bottom sheet dismisses
 						if (showMobileMap) setActiveLocation(null);
 					}}
 					className="flex items-center gap-2 bg-gray-900 dark:bg-white
@@ -186,6 +374,18 @@ function Search({ searchResults, searchLocation }) {
 						View in list →
 					</button>
 				</div>
+			)}
+
+			{/* ── Feature 1: Booking modifier modal ────────────────────────────── */}
+			{selectedListing && (
+				<BookingModal
+					listing={selectedListing}
+					initialStartDate={startDate}
+					initialEndDate={endDate}
+					initialGuests={noOfGuests}
+					onConfirm={handleBookingConfirm}
+					onClose={() => setSelectedListing(null)}
+				/>
 			)}
 
 			<Footer />
