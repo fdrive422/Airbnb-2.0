@@ -11,8 +11,11 @@ function InfoCard({
   onModify,
   overrideNights,
   overrideTotal,
+  overrideDateLabel,
+  overrideGuests,
 }) {
   const [liked, setLiked] = useState(false);
+  const hasOverride = overrideTotal != null;
 
   return (
     <div
@@ -67,26 +70,38 @@ function InfoCard({
             <StarIcon className="h-4 text-rose-400" />
             {star}
           </p>
+
           <div className="text-right">
             <p className="text-lg font-semibold lg:text-2xl dark:text-white">
               {formatUSD(price)}
               <span className="text-sm font-normal text-gray-400 dark:text-gray-500"> / night</span>
             </p>
-            {overrideTotal != null ? (
-              <p className="text-xs font-medium text-rose-500 dark:text-rose-400">
-                {formatUSD(overrideTotal)} &middot; {overrideNights} night{overrideNights !== 1 ? "s" : ""} (custom)
-              </p>
+
+            {hasOverride ? (
+              /* Modified stay summary — shown after user confirms changes in modal */
+              <div className="mt-1 space-y-0.5">
+                {overrideDateLabel && (
+                  <p className="text-xs font-medium text-rose-600 dark:text-rose-400">
+                    {overrideDateLabel}
+                    {overrideGuests ? ` · ${overrideGuests} guest${overrideGuests !== 1 ? "s" : ""}` : ""}
+                  </p>
+                )}
+                <p className="text-sm font-semibold text-rose-500 dark:text-rose-400">
+                  {formatUSD(overrideTotal)} &middot; {overrideNights} night{overrideNights !== 1 ? "s" : ""}
+                </p>
+              </div>
             ) : (
               <p className="text-xs font-light text-gray-500 dark:text-gray-400">
                 {formatUSD(total)} total (incl. taxes &amp; fees)
               </p>
             )}
+
             {onModify && (
               <button
                 onClick={(e) => { e.stopPropagation(); onModify(); }}
                 className="mt-1 text-xs text-rose-500 hover:text-rose-600 font-medium underline underline-offset-2 transition-colors"
               >
-                {overrideTotal != null ? "Edit stay" : "Modify stay"}
+                {hasOverride ? "Edit stay" : "Modify stay"}
               </button>
             )}
           </div>

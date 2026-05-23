@@ -99,10 +99,11 @@ function Search({ searchResults, searchLocation }) {
 		}, 120);
 	};
 
-	const handleBookingConfirm = ({ nights, total }) => {
+	const handleBookingConfirm = ({ nights, total, startDate: s, endDate: e, guests: g }) => {
+		const dateLabel = `${format(s, "MMM d")} – ${format(e, "MMM d, yyyy")}`;
 		setBookingOverrides((prev) => ({
 			...prev,
-			[selectedListing.name]: { nights, total },
+			[selectedListing.name]: { nights, total, dateLabel, guests: g },
 		}));
 		setSelectedListing(null);
 	};
@@ -292,6 +293,8 @@ function Search({ searchResults, searchLocation }) {
 										onModify={() => setSelectedListing(listing)}
 										overrideNights={override?.nights}
 										overrideTotal={override?.total}
+										overrideDateLabel={override?.dateLabel}
+										overrideGuests={override?.guests}
 									/>
 								);
 							})
